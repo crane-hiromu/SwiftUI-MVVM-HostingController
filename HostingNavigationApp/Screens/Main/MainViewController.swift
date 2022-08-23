@@ -13,13 +13,28 @@ import Combine
 // MARK: - Controller
 final class MainViewController: UIHostingController<MainView> {
     
+    // MARK: Property
+    
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: Initializer
     
     init() {
         let viewModel = MainViewModel()
-        let mainView = MainView(viewModel: viewModel)
-        super.init(rootView: mainView)
+        super.init(rootView: .init(viewModel: viewModel))
         
+        bind(viewModel: viewModel)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        self.init()
+    }
+}
+
+// MARK: - Private
+private extension MainViewController {
+    
+    func bind(viewModel: MainViewModel) {
         viewModel.output.pushSubView.sink { [weak self] in
             Router.pushSubView(self)
         }.store(in: &cancellables)
@@ -27,9 +42,5 @@ final class MainViewController: UIHostingController<MainView> {
         viewModel.output.presentSubView.sink { [weak self] in
             Router.presentSubView(self)
         }.store(in: &cancellables)
-    }
-    
-    required convenience init?(coder aDecoder: NSCoder) {
-        self.init()
     }
 }

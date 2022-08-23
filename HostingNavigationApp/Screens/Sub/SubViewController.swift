@@ -14,8 +14,7 @@ final class SubViewController: UIHostingController<SubView> {
     
     init() {
         let viewModel = SubViewModel()
-        let mainView = SubView(viewModel: viewModel)
-        super.init(rootView: mainView)
+        super.init(rootView: .init(viewModel: viewModel))
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
